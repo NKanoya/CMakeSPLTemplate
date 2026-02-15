@@ -3,20 +3,17 @@ cmake_minimum_required(VERSION 3.22)
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR cortex-m3)
 
-project(stm32_template C ASM)
+# ===== 项目名称 / Project Name =====
+#
+# 构建输出目标名称（可以根据项目需要修改）
+# Build output target name (can be renamed as needed)
+set(CUSTOMIZED_PROJECT_NAME stm32_template)
+
+project(${CUSTOMIZED_PROJECT_NAME} C ASM)
 
 set(MCU_FLAGS -mcpu=cortex-m3 -mthumb)
 
-# ===== OpenOCD 安装目录 / OpenOCD Installation Directory =====
-#
-# 请将此路径修改为你本地 OpenOCD 的安装目录
-# / Please change this path to your local OpenOCD installation directory
-# / e.g. on Windows: "D:/Program/OpenOCD"
-#
-set(OPENOCD_DIR "D:/Program/OpenOCD")
-
-set(OPENOCD "${OPENOCD_DIR}/bin/openocd.exe")
-set(OPENOCD_SCRIPTS "${OPENOCD_DIR}/scripts")
+set(OPENOCD openocd)
 
 include_directories(
         user/inc
