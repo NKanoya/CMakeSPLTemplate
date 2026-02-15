@@ -9,7 +9,10 @@ set(CMAKE_SYSTEM_PROCESSOR cortex-m3)
 # Build output target name (can be renamed as needed)
 set(CUSTOMIZED_PROJECT_NAME stm32_template)
 
+set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/arm-none-eabi-toolchain.cmake" CACHE STRING "Toolchain file for ARM cross-compilation")
+
 project(${CUSTOMIZED_PROJECT_NAME} C ASM)
+
 
 set(MCU_FLAGS -mcpu=cortex-m3 -mthumb)
 
@@ -53,4 +56,15 @@ target_link_options(${PROJECT_NAME}.elf PRIVATE
 add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
         COMMAND arm-none-eabi-objcopy -O ihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex
         COMMAND arm-none-eabi-objcopy -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin
+)
+
+set(ELF_FILE "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.elf")
+string(REPLACE "\\" "/" ELF_FILE "${ELF_FILE}")
+# burn_stm32.bat
+file(WRITE "${CMAKE_BINARY_DIR}/burn_stm32.bat"
+        "@echo off\n"
+        "set TARGET_ELF=${ELF_FILE}\n"
+        "set OPENOCD_EXE=${OPENOCD}\n"
+        "echo Burning %TARGET_ELF% to STM32...\n"
+        "\"%OPENOCD_EXE%\" -f interface/cmsis-dap.cfg -f target/stm32f1x.cfg -c \"program %TARGET_ELF% verify reset exit\"\n"
 )

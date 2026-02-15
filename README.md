@@ -64,16 +64,19 @@ template/
 - `arm-none-eabi-gcc`
 - `arm-none-eabi-objcopy`
 
-**下载地址**
+**下载地址**：
+
 - [STM32CubeCLT 官方下载页面](https://www.st.com/en/development-tools/stm32cubeclt.html)
 - 或直接安装 [ARM GNU Toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm)
 
-**安装完成后验证**
+**安装完成后输入以下命令验证**：
 
 ```bash
 arm-none-eabi-gcc --version
 arm-none-eabi-objcopy --version
 ```
+
+- 如都能正常输出版本信息，则表明安装成功。
 
 ### 2. 安装 OpenOCD
 
@@ -88,30 +91,32 @@ OpenOCD 用于调试和烧录 MCU，通过 SWD/JTAG 与开发板连接。
 > **注意**：在 Windows 上需要将 OpenOCD 安装路径加入系统 PATH 环境变量。
 
 
-**安装完成后验证**
+**安装完成后输入以下命令验证**
 
 ```bash
 openocd --version
 ```
 
+- 如能正常输出版本信息，则表明安装成功。否则检查安装及 PATH 环境变量
 
-### 3.Zadig 驱动
+### 3. Zadig 驱动安装
 
 用于给 ST-Link / PWLink 安装 WinUSB 驱动，确保 USB 调试和烧录正常工作。
 
 **操作步骤 / Steps:**
 
-1. 从 [Zadig 官方网站](https://zadig.akeo.ie/) 下载并并运行 `zadig.exe`
+1. 从 [Zadig 官方网站](https://zadig.akeo.ie/) 下载并并运行 `zadig.exe`。
 
-2. 将 C8T6 开发板连接到电脑，打开 Zadig
+2. 将 C8T6 开发板连接到电脑，打开 Zadig。
 
 3. 在 Zadig 中选择你的设备：
 
-- 对 ST-Link V2，一般显示为 `STM32 STLink` 或 `STM32 Bootloader`
-- 对 PW-Link，一般显示为 `DAPLink CMSIS-DAP` 或 `MBED Interface`
+   - 对 ST-Link V2，一般显示为 `STM32 STLink` 或 `STM32 Bootloader`
+   - 对 PW-Link，一般显示为 `DAPLink CMSIS-DAP` 或 `MBED Interface`
 
-4. 选择驱动为 WinUSB
-5. 点击 `Install Driver` 或 `Replace Driver`
+4. 选择驱动为 WinUSB。
+
+5. 点击 `Install Driver` 或 `Replace Driver` 。
 
 驱动安装完成后，即可通过 OpenOCD 访问开发板进行烧录和调试。
 
@@ -123,19 +128,19 @@ openocd --version
 
 ### 1. 配置 CLion 工具链 (只需一次)
 
-1. 打开 CLion，点击 **File → Settings → Build, Execution, Deployment → CMake**
+1. 打开 CLion，点击 **File → Settings → Build, Execution, Deployment → CMake** 。
 
-2. 点击 **Toolchains**，添加一个新的 Toolchain
+2. 点击 **Toolchains**，添加一个新的 Toolchain。
 
 3. 完善 Toolchain 信息：
 
-   - **名称**：自取，例如 **ARM**
-   - **构建工具**：保持默认即可
-   - **C 编译器**：填写 `arm-none-eabi-gcc`  
-   - **C++ 编译器**：填写 `arm-none-eabi-g++`  
-   - **调试器**：选择 **Custom GDB executable**，填写 `arm-none-eabi-gdb`
+   - **名称 / Name**：自取，例如 **ARM**
+   - **构建工具 / Build Tool**：保持默认即可
+   - **C 编译器 / C Compiler**：填写 `arm-none-eabi-gcc`  
+   - **C++ 编译器 / C++ Compiler**：填写 `arm-none-eabi-g++`  
+   - **调试器 / Debugger**：选择 **Custom GDB executable**，填写 `arm-none-eabi-gdb`
 
-4. 点击 **Apply → OK** 保存配置
+4. 点击 **Apply → OK** 保存配置。
 
 
 > 该工具链设置仅需进行一次，保存后即可永久使用
@@ -143,14 +148,14 @@ openocd --version
 
 ### 2. 克隆本仓库并使用 CLion 打开
 
-1. 在本地终端或命令行输入以下命令，将仓库克隆到本地：
+- 在本地终端或命令行输入以下命令，将仓库克隆到本地：
 
-```bash
-git clone https://github.com/NKanoya/CMakeSPLTemplate.git
-cd CMakeSPLTemplate
-```
+    ```bash
+    git clone https://github.com/NKanoya/CMakeSPLTemplate.git
+    cd CMakeSPLTemplate
+    ```
 
-打开 CLion，点击 Open，选择本项目根目录以打开工程
+- 克隆完成后，打开 CLion，点击 Open，选择本项目根目录以打开工程
 
 ### 3. 配置打开的 CLion 项目
 
@@ -158,16 +163,11 @@ cd CMakeSPLTemplate
 
 - **名称 / Name" 和 "构建类型 / Build Type**：自定义或保持默认（推荐使用默认 **Debug**）
 
-- **工具链 / Toolchain**：选择步骤 1 中新建的工具链，例如 **ARM**  
+- **工具链 / Toolchain**：选择步骤 1 中创建的工具链，例如 **ARM** [(跳转到这步)](#1-配置-clion-工具链-只需一次) 
+
   - 工具链只需创建一次，后续直接选择即可
 
-- **生成器 / Generator**：保持默认
-
-- **CMake 选项 / CMake Options**：填入以下内容  
-
-    ```text
-    -DCMAKE_TOOLCHAIN_FILE=arm-none-eabi-toolchain.cmake
-    ```
+- **生成器 / Generator** 及其余选项：保持默认
 
 点击 确定 保存配置。
 
@@ -176,8 +176,6 @@ cd CMakeSPLTemplate
 如果 CMake 输出显示 `[已完成]` / `[Finished]`，则表示项目配置成功。
 
 ### 4. 更改项目名称 + 构建
-
-#### 4. 更改项目名称并构建
 
 1. 在 CLion 左上角的项目路径视图中，打开根目录下的 `CMakeLists.txt`
 
@@ -203,45 +201,9 @@ cd CMakeSPLTemplate
 
 1. 点击 CLion 左上角菜单键（图标右侧的“菜单条”），依次选择 "运行 → 编辑配置"。
 
-2. 在 "**可执行文件**" 下拉菜单中选择 "自定义"，填入 OpenOCD 可执行文件路径。
+2. 在 "**可执行文件**" 下拉菜单中选择 "自定义"，填入 **`burn_stm32.bat`**。
 
-    - 可执行文件位于 OpenOCD 安装目录下 `\bin\openocd.exe` 内，例如 `D:/Program/OpenOCD/openocd.exe`。
-
-3. 填写 "**程序实参**" 
-
-    - 如果使用 PWLink，可以填入：
-
-      ```bash
-      -f
-      interface/cmsis-dap.cfg
-      -f
-      target/stm32f1x.cfg
-      -c
-      "program $env(BUILD_DIR_NAME)/stm32_template.elf verify reset exit"
-      ```
-
-    - 如果使用 STLink，可以填入：
-
-      ```bash
-      -f
-      interface/stlink.cfg
-      -f
-      target/stm32f1x.cfg
-      -c
-      "program $env(BUILD_DIR_NAME)/stm32_template.elf verify reset exit"
-      ```
-
-4. "**工作目录**" 填入 `$ProjectFileDir$` 。
-
-5. "**环境变量**" 填入
-
-    ```text
-    BUILD_DIR_NAME=cmake-build-debug
-    ```
-
-    - `cmake-build-debug` 是输出目录，如果输出目录是别的名称，需要修改。
-
-5. 点击下方 "**运行 / Run**"，程序应能重新构建，并烧录到单片机中。
+3. 点击下方 "**运行 / Run**"，程序应能重新构建，并烧录到单片机中。
 
 点击 "运行" 按钮后，如果下方运行窗口输出内容最后部分包含:
 
